@@ -1,0 +1,39 @@
+package com.company.backgammon;
+
+import com.company.backgammon.logic.Game;
+import com.company.backgammon.logic.IPlayer;
+import com.company.backgammon.network.InvalidProtocolException;
+import com.company.backgammon.network.NetworkClient;
+import com.company.backgammon.ui.BackGammonGUI;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+public class Main {
+
+    public static void startGameWithTwoGUI() throws InvocationTargetException, InterruptedException {
+        final IPlayer[] players = new IPlayer[2];
+        SwingUtilities.invokeAndWait(() -> players[0] = new BackGammonGUI());
+
+        SwingUtilities.invokeAndWait(() -> players[1] = new BackGammonGUI());
+
+        Game game = new Game(players[0],players[1]);
+        game.start();
+    }
+
+    public static void startGameWithGUIAndNetwork() throws InvocationTargetException, InterruptedException, IOException, InvalidProtocolException {
+        final IPlayer[] players = new IPlayer[2];
+        SwingUtilities.invokeAndWait(() -> players[0] = new BackGammonGUI());
+
+        players[1] = new NetworkClient("localhost",12345);
+
+        Game game = new Game(players[0],players[1]);
+        game.start();
+    }
+
+    public static void main(String[] args) throws InvocationTargetException, InterruptedException, IOException, InvalidProtocolException {
+        startGameWithGUIAndNetwork();
+//        startGameWithTwoGUI();
+    }
+}
